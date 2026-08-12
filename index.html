@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1E3A4A" />
+  <title>North Beach Repair | Code Reference</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">NORTH BEACH REPAIR</p>
+      <h1>Field Code Reference</h1>
+    </div>
+    <button id="installBtn" class="ghost-btn" hidden>Install</button>
+  </header>
+
+  <main>
+    <section class="notice" aria-label="Important notice">
+      <strong>Field summary — not the code book.</strong>
+      <span>Use these cards to find the right rule quickly, then verify the adopted text, NH overlay, permit path, project exceptions, and licensing scope before regulated work.</span>
+    </section>
+
+    <section id="baselinePanel" class="baseline-panel" aria-label="New Hampshire code baseline">
+      <div class="baseline-heading">
+        <div>
+          <span class="baseline-label">CURRENT NH BASELINE</span>
+          <strong id="baselineCodes"></strong>
+        </div>
+        <span id="baselineDate" class="baseline-date"></span>
+      </div>
+      <p id="transitionNote"></p>
+      <div class="baseline-links">
+        <a id="stateCodeLink" target="_blank" rel="noopener noreferrer">NH State Building Code</a>
+        <a id="statuteLink" target="_blank" rel="noopener noreferrer">NH RSA 155-A</a>
+      </div>
+    </section>
+
+    <section class="search-panel">
+      <label for="searchInput">Search by task, rule, or code section</label>
+      <div class="search-row">
+        <input id="searchInput" type="search" autocomplete="off" placeholder="e.g. drill joist, toilet clearance, GFCI bathroom" />
+        <button id="clearSearch" class="icon-btn" aria-label="Clear search">×</button>
+      </div>
+      <div id="categoryChips" class="chips" aria-label="Categories"></div>
+    </section>
+
+    <section class="toolbar">
+      <div>
+        <span id="resultCount">0 rules</span>
+        <span id="filterLabel" class="muted"></span>
+      </div>
+      <label class="favorite-toggle">
+        <input id="favoritesOnly" type="checkbox" /> Favorites only
+      </label>
+    </section>
+
+    <section id="results" class="results" aria-live="polite"></section>
+
+    <section id="emptyState" class="empty-state" hidden>
+      <h2>No matches</h2>
+      <p>Try a broader term or choose a category.</p>
+    </section>
+  </main>
+
+  <template id="codeCardTemplate">
+    <article class="code-card">
+      <div class="card-topline">
+        <span class="category-badge"></span>
+        <button class="favorite-btn" aria-label="Toggle favorite">☆</button>
+      </div>
+      <h2 class="rule-title"></h2>
+      <p class="rule-summary"></p>
+      <div class="key-points"></div>
+      <div class="flags"></div>
+      <dl class="meta-grid">
+        <div><dt>Code</dt><dd class="code-ref"></dd></div>
+        <div><dt>Edition</dt><dd class="edition"></dd></div>
+        <div><dt>Base summary</dt><dd class="verification-status"></dd></div>
+        <div><dt>NH overlay</dt><dd class="nh-status"></dd></div>
+        <div><dt>Updated</dt><dd class="verified"></dd></div>
+      </dl>
+      <div class="card-actions">
+        <a class="source-link" target="_blank" rel="noopener noreferrer">Open code/source</a>
+        <a class="nh-source-link secondary-link" target="_blank" rel="noopener noreferrer">NH source</a>
+        <button class="details-btn">Details</button>
+      </div>
+      <div class="details" hidden>
+        <p class="notes"></p>
+        <div class="keywords-wrap"><strong>Keywords:</strong> <span class="keywords"></span></div>
+      </div>
+    </article>
+  </template>
+
+  <footer>
+    <p>Keep source links and verification dates current. Never combine requirements from different code editions on the same permit unless the authority having jurisdiction expressly allows it.</p>
+  </footer>
+
+  <script src="data/baseline.js"></script>
+  <script src="data/codes-1.js"></script>
+  <script src="data/codes-2.js"></script>
+  <script src="data/codes-3.js"></script>
+  <script src="data/codes-4.js"></script>
+  <script src="data/codes-5.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
