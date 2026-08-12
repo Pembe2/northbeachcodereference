@@ -41,12 +41,13 @@ jobs:
 
           DEV_SHA=$(git -C dev rev-parse HEAD)
           DEV_VERSION=${DEV_SHA:0:7}
+          export DEV_VERSION
 
           python - <<'PY'
           from pathlib import Path
-          import os, re
+          import os
 
-          version = os.environ.get('DEV_VERSION')
+          version = os.environ['DEV_VERSION']
           p = Path('public/dev/index.html')
           text = p.read_text()
 
@@ -69,8 +70,6 @@ jobs:
           text = text.replace('DEVELOPMENT PREVIEW</div>', f'DEVELOPMENT PREVIEW · BUILD {version}</div>')
           p.write_text(text)
           PY
-        env:
-          DEV_VERSION: ${{ github.sha }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
