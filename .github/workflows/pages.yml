@@ -53,6 +53,7 @@ jobs:
 
           assets = [
               'styles.css',
+              'followup.css',
               'manifest.json',
               'data/baseline.js',
               'data/codes-1.js',
