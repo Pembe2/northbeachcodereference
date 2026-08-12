@@ -23,20 +23,27 @@
     <section class="job-panel" aria-labelledby="jobHeading">
       <span class="panel-kicker">JOB LOOKUP</span>
       <h2 id="jobHeading">What are you doing?</h2>
-      <p>Describe the work in plain English. The app will assemble the code cards that apply and flag whether the job is a normal handyman task, minor/incidental trade work, or a licensed-trade referral.</p>
+      <p>Describe the work in plain English. The app will narrow the job with follow-up questions when needed, then assemble the pertinent reviewed code cards.</p>
       <form id="jobForm" class="job-form">
         <div class="job-input-row">
-          <input id="jobInput" type="text" autocomplete="off" placeholder="e.g. repair deck ledger, replace toilet, drill a floor joist" />
+          <input id="jobInput" type="text" autocomplete="off" placeholder="e.g. repair deck, drill a floor joist, replace a toilet" />
           <button type="submit" class="primary-btn">Find codes</button>
         </div>
       </form>
       <div class="job-examples" aria-label="Example job searches">
-        <button type="button" class="example-job" data-job-example="repair deck ledger">Deck repair</button>
+        <button type="button" class="example-job" data-job-example="repair deck">Repair deck</button>
+        <button type="button" class="example-job" data-job-example="repair stairs">Repair stairs</button>
         <button type="button" class="example-job" data-job-example="drill a floor joist">Drill joist</button>
         <button type="button" class="example-job" data-job-example="replace a toilet">Replace toilet</button>
-        <button type="button" class="example-job" data-job-example="replace a bathroom outlet">Replace bathroom outlet</button>
       </div>
       <div id="jobMessage" class="job-message" hidden></div>
+
+      <section id="followupPanel" class="followup-panel" hidden>
+        <span class="panel-kicker">ONE MORE DETAIL</span>
+        <h3 id="followupQuestion"></h3>
+        <div id="followupOptions" class="followup-options"></div>
+      </section>
+
       <section id="jobResult" class="job-result" hidden>
         <div class="job-result-heading">
           <div>
@@ -104,6 +111,11 @@
         <button class="favorite-btn" aria-label="Toggle favorite">☆</button>
       </div>
       <h2 class="rule-title"></h2>
+
+      <div class="why-applies" hidden>
+        <strong>Why this applies</strong>
+        <span class="why-text"></span>
+      </div>
 
       <section class="answer-block">
         <span class="section-label">Field answer</span>
