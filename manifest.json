@@ -1,0 +1,9 @@
+{
+  "name": "North Beach Repair Field Code Reference",
+  "short_name": "Code Reference",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F7F9F8",
+  "theme_color": "#1E3A4A",
+  "icons": []
+}
