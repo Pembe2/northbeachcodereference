@@ -39,6 +39,39 @@ jobs:
           mkdir -p public/dev
           rsync -a --delete --exclude='.git*' --exclude='.github' dev/ public/dev/
 
+          DEV_SHA=$(git -C dev rev-parse HEAD)
+          DEV_VERSION=${DEV_SHA:0:7}
+
+          python - <<'PY'
+          from pathlib import Path
+          import os, re
+
+          version = os.environ.get('DEV_VERSION')
+          p = Path('public/dev/index.html')
+          text = p.read_text()
+
+          assets = [
+              'styles.css',
+              'manifest.json',
+              'data/baseline.js',
+              'data/codes-1.js',
+              'data/codes-2.js',
+              'data/codes-3.js',
+              'data/codes-4.js',
+              'data/codes-5.js',
+              'data/jobs.js',
+              'app.js'
+          ]
+
+          for asset in assets:
+              text = text.replace(asset, f'{asset}?v={version}')
+
+          text = text.replace('DEVELOPMENT PREVIEW</div>', f'DEVELOPMENT PREVIEW · BUILD {version}</div>')
+          p.write_text(text)
+          PY
+        env:
+          DEV_VERSION: ${{ github.sha }}
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
