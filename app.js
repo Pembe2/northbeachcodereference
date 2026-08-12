@@ -184,34 +184,28 @@
     return diagrams[entry.id] || "";
   }
 
+  function jobMatches(job, text) {
+    const groups = Array.isArray(job.matchGroups) ? job.matchGroups : [];
+    if (!groups.length) return false;
+    return groups.every(group => (group || []).some(term => text.includes(normalize(term))));
+  }
+
   function findJobIntent(rawText) {
     const text = normalize(rawText);
     if (!text) return null;
 
-    for (const job of jobs) {
-      const mentionsReceptacle = ["outlet", "receptacle", "plug"].some(word => text.includes(word));
-      const jobAliasMatch = (job.aliases || []).some(alias => text.includes(normalize(alias)));
-      if (!mentionsReceptacle && !jobAliasMatch) continue;
+    const matches = jobs.filter(job => jobMatches(job, text));
+    if (!matches.length) return null;
 
-      let location = null;
-      for (const [locationId, aliases] of Object.entries(job.locations || {})) {
-        if ((aliases || []).some(alias => text.includes(normalize(alias)))) {
-          location = locationId;
-          break;
-        }
-      }
+    const priority = { referral: 3, incidental: 2, core: 1 };
+    matches.sort((a, b) => (priority[b.scope] || 0) - (priority[a.scope] || 0));
+    return { job: matches[0], text };
+  }
 
-      let variant = null;
-      for (const [variantId, aliases] of Object.entries(job.variants || {})) {
-        if ((aliases || []).some(alias => text.includes(normalize(alias)))) {
-          variant = variantId;
-          break;
-        }
-      }
-
-      return { job, location, variant };
-    }
-    return null;
+  function scopeClass(scope) {
+    if (scope === "core") return "scope-core";
+    if (scope === "incidental") return "scope-incidental";
+    return "scope-referral";
   }
 
   function activateJob(rawText) {
@@ -223,60 +217,38 @@
       state.jobContext = null;
       els.jobResult.hidden = true;
       els.jobMessage.hidden = false;
-      els.jobMessage.textContent = "I don't recognize that job yet. The first supported workflow is installing or replacing a bathroom outlet/receptacle.";
+      els.jobMessage.textContent = "I don't recognize that job yet. Try a more specific task such as ‘repair deck ledger,’ ‘drill a floor joist,’ ‘replace a toilet,’ or ‘replace a bathroom outlet.’";
       renderResults();
       return;
     }
 
-    if (!intent.location) {
-      state.jobRuleIds = null;
-      state.jobContext = null;
-      els.jobResult.hidden = true;
-      els.jobMessage.hidden = false;
-      els.jobMessage.textContent = "I recognized a receptacle job. Add the room/location for now — for example: ‘install an outlet in the bathroom.’";
-      renderResults();
-      return;
-    }
-
-    const ruleSet = intent.job.rules?.[intent.location];
-    if (!ruleSet) {
-      state.jobRuleIds = null;
-      state.jobContext = null;
-      els.jobResult.hidden = true;
-      els.jobMessage.hidden = false;
-      els.jobMessage.textContent = `I recognized the job and location, but ${intent.location} is not wired into the checklist yet.`;
-      renderResults();
-      return;
-    }
-
-    const ids = new Set(ruleSet.always || []);
-    if (intent.variant && ruleSet.conditional?.[intent.variant]) {
-      ruleSet.conditional[intent.variant].forEach(id => ids.add(id));
-    }
-
+    const ids = new Set((intent.job.ruleIds || []).filter(id => entries.some(entry => entry.id === id)));
     state.jobRuleIds = ids;
     state.jobContext = intent;
     state.category = "All";
     state.query = "";
     els.search.value = "";
 
-    const variantLabel = intent.variant === "replace" ? "Replace" : "Install";
-    const locationLabel = intent.location.charAt(0).toUpperCase() + intent.location.slice(1);
-    els.jobResultTitle.textContent = `${variantLabel} receptacle · ${locationLabel}`;
+    els.jobResultTitle.textContent = intent.job.name;
     els.jobResultSummary.textContent = `${ids.size} code checks selected from the reviewed database.`;
     els.jobContext.innerHTML = "";
 
-    const tags = [
-      `Work: ${variantLabel.toLowerCase()} receptacle`,
-      `Location: ${locationLabel}`,
-      "Occupancy: dwelling"
-    ];
-    tags.forEach(text => {
-      const span = document.createElement("span");
-      span.className = "context-tag";
-      span.textContent = text;
-      els.jobContext.appendChild(span);
-    });
+    const scope = document.createElement("span");
+    scope.className = `context-tag ${scopeClass(intent.job.scope)}`;
+    scope.textContent = intent.job.scopeLabel || "Scope check";
+    els.jobContext.appendChild(scope);
+
+    const dwelling = document.createElement("span");
+    dwelling.className = "context-tag";
+    dwelling.textContent = "Context: residential / dwelling";
+    els.jobContext.appendChild(dwelling);
+
+    if (intent.job.scopeNote) {
+      const note = document.createElement("div");
+      note.className = `scope-note ${scopeClass(intent.job.scope)}`;
+      note.textContent = intent.job.scopeNote;
+      els.jobContext.appendChild(note);
+    }
 
     els.jobResult.hidden = false;
     renderChips();
