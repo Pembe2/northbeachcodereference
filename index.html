@@ -18,9 +18,39 @@
   </header>
 
   <main>
+    <div class="dev-banner">DEVELOPMENT PREVIEW</div>
+
+    <section class="job-panel" aria-labelledby="jobHeading">
+      <span class="panel-kicker">JOB LOOKUP</span>
+      <h2 id="jobHeading">What are you doing?</h2>
+      <p>Describe the work in plain English. The app will assemble the code cards that apply to that job.</p>
+      <form id="jobForm" class="job-form">
+        <div class="job-input-row">
+          <input id="jobInput" type="text" autocomplete="off" placeholder="e.g. I'm installing an outlet in the bathroom" />
+          <button type="submit" class="primary-btn">Find codes</button>
+        </div>
+      </form>
+      <div class="job-examples" aria-label="Example job searches">
+        <button type="button" class="example-job" data-job-example="install an outlet in the bathroom">Bathroom outlet</button>
+        <button type="button" class="example-job" data-job-example="replace an outlet in the bathroom">Replace bathroom outlet</button>
+      </div>
+      <div id="jobMessage" class="job-message" hidden></div>
+      <section id="jobResult" class="job-result" hidden>
+        <div class="job-result-heading">
+          <div>
+            <span class="panel-kicker">JOB CHECKLIST</span>
+            <h3 id="jobResultTitle"></h3>
+          </div>
+          <button id="clearJob" type="button" class="text-btn">Clear job</button>
+        </div>
+        <p id="jobResultSummary"></p>
+        <div id="jobContext" class="job-context"></div>
+      </section>
+    </section>
+
     <section class="notice" aria-label="Important notice">
       <strong>Field summary — not the code book.</strong>
-      <span>Use these cards to find the right rule quickly, then verify the adopted text, NH overlay, permit path, project exceptions, and licensing scope before regulated work.</span>
+      <span>The job engine only selects reviewed cards from this database. Verify the adopted text, NH overlay, permit path, project exceptions, and licensing scope before regulated work.</span>
     </section>
 
     <section id="baselinePanel" class="baseline-panel" aria-label="New Hampshire code baseline">
@@ -39,7 +69,7 @@
     </section>
 
     <section class="search-panel">
-      <label for="searchInput">Search by task, rule, or code section</label>
+      <label for="searchInput">Or search a specific rule or code section</label>
       <div class="search-row">
         <input id="searchInput" type="search" autocomplete="off" placeholder="e.g. drill joist, toilet clearance, GFCI bathroom" />
         <button id="clearSearch" class="icon-btn" aria-label="Clear search">×</button>
@@ -61,7 +91,7 @@
 
     <section id="emptyState" class="empty-state" hidden>
       <h2>No matches</h2>
-      <p>Try a broader term or choose a category.</p>
+      <p>Try a broader term, clear the job checklist, or choose a category.</p>
     </section>
   </main>
 
@@ -72,25 +102,44 @@
         <button class="favorite-btn" aria-label="Toggle favorite">☆</button>
       </div>
       <h2 class="rule-title"></h2>
-      <p class="rule-summary"></p>
-      <div class="key-points"></div>
+
+      <section class="answer-block">
+        <span class="section-label">Field answer</span>
+        <p class="rule-summary"></p>
+      </section>
+
+      <div class="diagram-slot" hidden></div>
+
+      <section class="checks-block">
+        <div class="checks-heading-row">
+          <span class="section-label">Critical checks</span>
+          <span class="quick-read">Fast read</span>
+        </div>
+        <div class="key-points"></div>
+      </section>
+
       <div class="flags"></div>
-      <dl class="meta-grid">
-        <div><dt>Code</dt><dd class="code-ref"></dd></div>
-        <div><dt>Edition</dt><dd class="edition"></dd></div>
-        <div><dt>Base summary</dt><dd class="verification-status"></dd></div>
-        <div><dt>NH overlay</dt><dd class="nh-status"></dd></div>
-        <div><dt>Updated</dt><dd class="verified"></dd></div>
-      </dl>
-      <div class="card-actions">
-        <a class="source-link" target="_blank" rel="noopener noreferrer">Open code/source</a>
-        <a class="nh-source-link secondary-link" target="_blank" rel="noopener noreferrer">NH source</a>
-        <button class="details-btn">Details</button>
-      </div>
-      <div class="details" hidden>
-        <p class="notes"></p>
-        <div class="keywords-wrap"><strong>Keywords:</strong> <span class="keywords"></span></div>
-      </div>
+
+      <details class="details-shell">
+        <summary class="details-summary">Code details & sources</summary>
+        <div class="details-body">
+          <dl class="meta-grid">
+            <div><dt>Code</dt><dd class="code-ref"></dd></div>
+            <div><dt>Edition</dt><dd class="edition"></dd></div>
+            <div><dt>Base summary</dt><dd class="verification-status"></dd></div>
+            <div><dt>NH overlay</dt><dd class="nh-status"></dd></div>
+            <div><dt>Updated</dt><dd class="verified"></dd></div>
+          </dl>
+          <div class="card-actions">
+            <a class="source-link" target="_blank" rel="noopener noreferrer">Open code/source</a>
+            <a class="nh-source-link secondary-link" target="_blank" rel="noopener noreferrer">NH source</a>
+          </div>
+          <div class="details">
+            <p class="notes"></p>
+            <div class="keywords-wrap"><strong>Keywords:</strong> <span class="keywords"></span></div>
+          </div>
+        </div>
+      </details>
     </article>
   </template>
 
@@ -104,6 +153,7 @@
   <script src="data/codes-3.js"></script>
   <script src="data/codes-4.js"></script>
   <script src="data/codes-5.js"></script>
+  <script src="data/jobs.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
