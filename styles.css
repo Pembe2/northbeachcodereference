@@ -130,6 +130,19 @@ main { width: min(920px, 100%); margin: 0 auto; padding: 16px; }
   font-size: .76rem;
   font-weight: 750;
 }
+.context-tag.scope-core { background: var(--ok-bg); color: var(--ok); }
+.context-tag.scope-incidental { background: var(--warning-bg); color: var(--warning); }
+.context-tag.scope-referral { background: var(--danger-bg); color: var(--danger); }
+.scope-note {
+  flex: 1 0 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: .86rem;
+  line-height: 1.45;
+}
+.scope-note.scope-core { background: #f1f8f3; color: #315e3d; }
+.scope-note.scope-incidental { background: var(--warning-bg); color: #6f4c00; }
+.scope-note.scope-referral { background: var(--danger-bg); color: #712626; }
 
 .notice {
   display: grid;
