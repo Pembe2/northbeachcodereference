@@ -1,6 +1,6 @@
 const scopeKey = new URL(self.registration.scope).pathname.replace(/[^a-z0-9]+/gi, "-") || "root";
 const CACHE_PREFIX = `nbr-code-reference-${scopeKey}-`;
-const CACHE = `${CACHE_PREFIX}v4`;
+const CACHE = `${CACHE_PREFIX}v5`;
 const ASSETS = [
   "./",
   "index.html",
@@ -31,5 +31,20 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
+  if (event.request.method !== "GET") return;
+
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    try {
+      const response = await fetch(event.request, { cache: "no-store" });
+      if (response && response.ok && new URL(event.request.url).origin === self.location.origin) {
+        cache.put(event.request, response.clone());
+      }
+      return response;
+    } catch (error) {
+      const cached = await cache.match(event.request);
+      if (cached) return cached;
+      throw error;
+    }
+  })());
 });
