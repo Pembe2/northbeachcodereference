@@ -23,16 +23,18 @@
     <section class="job-panel" aria-labelledby="jobHeading">
       <span class="panel-kicker">JOB LOOKUP</span>
       <h2 id="jobHeading">What are you doing?</h2>
-      <p>Describe the work in plain English. The app will assemble the code cards that apply to that job.</p>
+      <p>Describe the work in plain English. The app will assemble the code cards that apply and flag whether the job is a normal handyman task, minor/incidental trade work, or a licensed-trade referral.</p>
       <form id="jobForm" class="job-form">
         <div class="job-input-row">
-          <input id="jobInput" type="text" autocomplete="off" placeholder="e.g. I'm installing an outlet in the bathroom" />
+          <input id="jobInput" type="text" autocomplete="off" placeholder="e.g. repair deck ledger, replace toilet, drill a floor joist" />
           <button type="submit" class="primary-btn">Find codes</button>
         </div>
       </form>
       <div class="job-examples" aria-label="Example job searches">
-        <button type="button" class="example-job" data-job-example="install an outlet in the bathroom">Bathroom outlet</button>
-        <button type="button" class="example-job" data-job-example="replace an outlet in the bathroom">Replace bathroom outlet</button>
+        <button type="button" class="example-job" data-job-example="repair deck ledger">Deck repair</button>
+        <button type="button" class="example-job" data-job-example="drill a floor joist">Drill joist</button>
+        <button type="button" class="example-job" data-job-example="replace a toilet">Replace toilet</button>
+        <button type="button" class="example-job" data-job-example="replace a bathroom outlet">Replace bathroom outlet</button>
       </div>
       <div id="jobMessage" class="job-message" hidden></div>
       <section id="jobResult" class="job-result" hidden>
@@ -50,7 +52,7 @@
 
     <section class="notice" aria-label="Important notice">
       <strong>Field summary — not the code book.</strong>
-      <span>The job engine only selects reviewed cards from this database. Verify the adopted text, NH overlay, permit path, project exceptions, and licensing scope before regulated work.</span>
+      <span>The job engine only selects reviewed cards from this database. Scope labels are a screening aid, not a license determination. Verify the adopted text, NH overlay, permit path, project exceptions, and licensing scope before regulated work.</span>
     </section>
 
     <section id="baselinePanel" class="baseline-panel" aria-label="New Hampshire code baseline">
